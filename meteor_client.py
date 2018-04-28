@@ -5,17 +5,15 @@ import meteordoctorlib as mdl
 
 ## Settings
 plot_spec = False
-override_fft_calc = False
 
 ## Some constants
-target_buffer_len = 4000
+target_buffer_len = 8000
 NOVERLAP = 0.8
 spec_xy = 256
-NFFT_OVERRIDE = 128
-norm_aspect = 1
+norm_aspect = 1.5
 
 ## Filename
-fn = "sample_meteor_data.wav"
+fn = "sample_meteor_data_1hr.wav"
 
 ### Load main file
 def process_wav_file(fn): 
@@ -35,13 +33,11 @@ def process_wav_file(fn):
         ## Read audio data into memory
         shifter = i/2 ## 1/2 1/2 buffer overlap
         in_frame = mdl.import_buffer(main_buffer, fs, shifter*length, (shifter+1)*length)
-        print("Data Len: ", len(in_frame))
+        #print("Data Len: ", len(in_frame))
         ## Lets do stuff!
-        if not override_fft_calc:
-            NFFT = mdl.calculate_nseg(length)
-        else:
-            NFFT = NFFT_OVERRIDE
-        print("NFFT,", NFFT)
+        NFFT = mdl.calculate_nseg(length)
+
+        #print("NFFT,", NFFT)
         f, t, Zxx = stft(in_frame, fs=fs, nperseg=NFFT, noverlap=NFFT*NOVERLAP)
         mag = np.abs(Zxx)
         
@@ -50,7 +46,7 @@ def process_wav_file(fn):
         signal_dict['fs'] = fs
         minf = NFFT*500/fs
         maxf = NFFT*1500/fs
-        signal_dict['magnitude'] = mdl.normalise_spectrogram(mag[int(minf):int(maxf), ...], newx=spec_xy*norm_aspect, newy=spec_xy)
+        signal_dict['magnitude'] = mdl.normalise_spectrogram(mag[int(minf):int(maxf), ...], newx=int(spec_xy*norm_aspect), newy=int(spec_xy))
         mdl.save_buffer(signal_dict)
         if plot_spec:
             plt.subplot(2, 1, 1)
