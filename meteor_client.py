@@ -15,7 +15,7 @@ NFFT_OVERRIDE = 128
 norm_aspect = 1
 
 ## Filename
-fn = "/media/jonathan/ea2eea90-b89c-4e24-b854-05970b317ba4/sample_meteor_data.wav"
+fn = "sample_meteor_data.wav"
 
 ### Load main file
 def process_wav_file(fn): 
