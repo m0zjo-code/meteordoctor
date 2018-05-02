@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 ## Takes training IQ data and generates training features
 
 SPEC_SIZE = 256 ## NxN input tensor size
-input_folder = "/media/jonathan/ea2eea90-b89c-4e24-b854-05970b317ba4/meteordoctor_data_test"
+input_folder = "/home/jonathan/meteordoctor_dataset_1"
 NOVERLAP = 0.8
 
 
@@ -37,8 +37,8 @@ def feature_gen(file_list, spec_size):
         #print(feature_dict['differentialspectrum_freq'].shape)
         #print(feature_dict['differentialspectrum_time'].shape)
         
-        tmp_spec = np.stack((feature_dict['magnitude'], feature_dict['phase'], feature_dict['corrcoef'], feature_dict['differentialspectrum_freq'], feature_dict['differentialspectrum_time']), axis=-1)
-        output_list_spec.append(tmp_spec)
+        #tmp_spec = np.stack((feature_dict['magnitude'], feature_dict['phase'], feature_dict['corrcoef'], feature_dict['differentialspectrum_freq'], feature_dict['differentialspectrum_time']), axis=-1)
+        output_list_spec.append(feature_dict['magnitude'])
         
         #print(feature_dict['psd'].shape)
         #print(feature_dict['variencespectrum'].shape)
@@ -46,8 +46,8 @@ def feature_gen(file_list, spec_size):
         #print(feature_dict['min_spectrum'].shape)
         #print(feature_dict['min_spectrum'].shape)
         
-        tmp_psd = np.stack((feature_dict['psd'], feature_dict['variencespectrum'], feature_dict['differentialspectrumdensity'], feature_dict['min_spectrum'], feature_dict['min_spectrum']), axis=-1)
-        output_list_psd.append(tmp_psd)
+        #tmp_psd = np.stack((feature_dict['psd'], feature_dict['variencespectrum'], feature_dict['differentialspectrumdensity'], feature_dict['min_spectrum'], feature_dict['min_spectrum']), axis=-1)
+        output_list_psd.append(feature_dict['psd'])
 
         #plt.pcolormesh(Zxx_dat)
         #plt.show()
