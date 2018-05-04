@@ -4,6 +4,7 @@ import numpy as np
 from scipy.misc import imresize, imsave
 from scipy import signal
 from scipy.fftpack import fft, ifft, fftn
+from scipy.signal import stft
 
 LOG_IQ = True
 LOG_SPEC = True
@@ -221,3 +222,23 @@ def blockshaped(arr, nrows, ncols):
     return (arr.reshape(h//nrows, nrows, -1, ncols)
                .swapaxes(1,2)
                .reshape(-1, nrows, ncols))
+
+
+def generate_mag_feature(fs, in_frame, spec_xy = 256, norm_aspect = 1):
+    
+    MINF = 500
+    MAXF = 1500
+    
+    length = power_bit_length(len(in_frame))
+    
+    NFFT = calculate_nseg(length)
+
+    #print("NFFT,", NFFT)
+    f, t, Zxx = stft(in_frame, fs=fs, nperseg=NFFT, noverlap=NFFT*NOVERLAP)
+    mag = np.abs(Zxx*Zxx.conj())
+    
+    minf = NFFT*MINF/fs
+    maxf = NFFT*MAXF/fs
+    mag_norm = normalise_spectrogram(mag[int(minf):int(maxf), ...], newx=int(spec_xy*norm_aspect), newy=int(spec_xy))
+    
+    return mag_norm
